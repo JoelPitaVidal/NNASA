@@ -3,9 +3,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Optional;
+import javax.swing.*;
+import java.io.*;
 
 public class NASA extends JFrame {
             int opcion = 0;
+            ArrayList<String> misiones= new ArrayList<>();
+             Reportes r = new Reportes();
     public class Layout extends JFrame {
 
         public Layout(){
@@ -18,49 +26,47 @@ public class NASA extends JFrame {
             JPanel panel = new JPanel(new FlowLayout());
             //Botones
             JButton MisionGestion = new JButton("Gestión de misiones");
-            JButton FileGestion = new JButton("Gestión de Archivos");
             JButton DirectionSimulator = new JButton("Simulacion de Trayectoria");
             JButton MisionReport = new JButton("Reportes de mision");
             // Añadir los botones al panel
             panel.add(MisionGestion);
-            panel.add(FileGestion);
             panel.add(DirectionSimulator);
             panel.add(MisionReport);
             // Añadir el panel al JFrame
             add(panel);
             //Configuramos las acciónes de los botones
-            ArrayList<String> misiones= new ArrayList<>();
+
             //Gestion de Misiones
             MisionGestion.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deséa hacer? (1-añadir mision/2-eliminar mision/3-lista de misiones;)"));
+                    opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deséa hacer? (1-añadir mision/2-eliminar todas las misiones/3-lista de misiones;)"));
                     switch (opcion){
                         case 1:
-                            misiones.add(JOptionPane.showInputDialog("Inserte el nombre de la misión a realizar"));
+                            String nuevaMision = JOptionPane.showInputDialog("Inserte el nombre de la misión a realizar");
+                            if (misiones.contains(nuevaMision)) {
+                                JOptionPane.showMessageDialog(null,"La misión ya existe en la base de datos.");
+                                misiones.remove(2);
+                            } else {
+                                misiones.add(nuevaMision);
+                            }
                         break;
                         case 2:
-                            //TODO: configurar el borrado de misiones
-                            misiones.remove(misiones);
+                            misiones.removeAll(misiones);
                         break;
                         case 3:
                             JOptionPane.showMessageDialog(null,"Las misiones actuales són las siguientes: "+misiones);
                         break;
                     }
-
                 }
             });
-            //Gestion de Archivos
-            FileGestion.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
 
-                }
-            });
             //Simulación de Trayectoria
             DirectionSimulator.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+
+                    
 
                 }
             });
@@ -68,7 +74,31 @@ public class NASA extends JFrame {
             MisionReport.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    String MensajeLeido="";
+                    try {
 
+                        FileWriter fw = new FileWriter("ReporteMision.txt");
+
+                        fw.write("1. La nave recorrerá una cantidad de 156 años luz  "+
+                        "2. El destino de la nave es el planeta de Cadia   "+
+                        "3. El objetivo de la misión es cerrar la estructura paranormal conocida como 'ojo del terror'   "+
+                         "FIN DEL REGISTRO DE LA MISION: "+misiones);
+
+                        fw.close();
+                    } catch (IOException ex) {
+
+                        System.out.println("Ocurrió un error al escribir en el archivo: " + ex.getMessage());
+                    }
+
+                    try {
+
+                        FileReader lector = new FileReader("ReporteMision.txt");
+                        BufferedReader BR = new BufferedReader(lector);
+                        MensajeLeido = BR.readLine();
+
+                    } catch (Exception ex) {}
+
+                    JOptionPane.showMessageDialog(null,MensajeLeido);
                 }
             });
             // Ajustar el tamaño del JFrame y hacerlo visible
