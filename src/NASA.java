@@ -83,7 +83,7 @@ public class NASA extends JFrame {
                     double coordenadaZ = Math.random() * 2000 - 1000;
 
                     // Generar una dirección aleatoria
-                    String[] direcciones = {"Norte", "Sur", "Este", "Oeste", "Arriba", "Abajo"};
+                    String[] direcciones = {"Cadia", "Ultramar", "Terra", "Marte", "Ojo del Terror", "Mi casa"};
                     int indiceDireccion = (int) (Math.random() * direcciones.length);
                     String direccion = direcciones[indiceDireccion];
 
